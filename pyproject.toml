@@ -1,0 +1,35 @@
+[project]
+name = "pt"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Terry Brown", email = "brown.terryn@epa.gov" }
+]
+requires-python = ">=3.14"
+dependencies = [
+    "pyperclip>=1.11.0",
+    "pywin32>=311",
+    "textual>=8.2.2",
+]
+
+[build-system]
+requires = ["uv_build>=0.11.0,<0.12.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "ruff>=0.15.9",
+]
+
+[tool.ruff.lint]
+select = [
+    "E",  # pycodestyle
+    "F",  # Pyflakes
+    "UP",  # pyupgrade
+    "B",  # flake8-bugbear
+    "SIM",  # flake8-simplify
+    "I",  # isort
+    "N",  # pep8-naming
+    "C90",  # mccabe complexity
+]
