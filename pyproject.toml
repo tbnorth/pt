@@ -9,7 +9,6 @@ authors = [
 requires-python = ">=3.14"
 dependencies = [
     "pyperclip>=1.11.0",
-    "pywin32>=311",
     "textual>=8.2.2",
 ]
 
@@ -33,3 +32,6 @@ select = [
     "N",  # pep8-naming
     "C90",  # mccabe complexity
 ]
+
+[tool.ruff.lint.isort]
+known-first-party = ["pt"]

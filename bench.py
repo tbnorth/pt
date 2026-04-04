@@ -1,11 +1,8 @@
 """Code test/dev"""
 
-import asyncio
 from datetime import datetime
 
 import pyperclip
-import win32con
-import win32gui
 from textual.app import App, ComposeResult
 from textual.screen import Screen
 from textual.widgets import Footer, Header, Label
@@ -56,33 +53,6 @@ class TimeScreen(Screen):
         self.set_timer(0.66, self.app.pop_screen)
 
 
-class NoTitle(Label):
-    async def on_click(self) -> None:
-
-        colors = ["red", "white"]
-        for i in range(15):
-            self.styles.color = colors[i % 2]
-            self.app.refresh()
-            await asyncio.sleep(0.2)
-        self.styles.color = "white"
-        hwnd = win32gui.GetForegroundWindow()   
-        current_style = win32gui.GetWindowLong(hwnd, win32con.GWL_STYLE)
-        new_style = current_style ^ win32con.WS_CAPTION
-        win32gui.SetWindowLong(hwnd, win32con.GWL_STYLE, new_style)
-        win32gui.SetWindowPos(
-            hwnd,
-            0,
-            0,
-            0,
-            0,
-            0,
-            win32con.SWP_NOMOVE
-            | win32con.SWP_NOSIZE
-            | win32con.SWP_NOZORDER
-            | win32con.SWP_FRAMECHANGED,
-        )
-
-
 class Clock(Label):
     """A simple clock widget."""
 
@@ -93,7 +63,6 @@ class Clock(Label):
 
     def update_time(self) -> None:
         """Update the clock's label with the current time."""
-
         now = datetime.now().strftime("%H:%M:%S")
         self.update(now)
 
@@ -110,7 +79,6 @@ class Clock(Label):
 class PTLayout(FlexBoxContainer):
     def compose(self) -> ComposeResult:
         """Create child widgets for the app."""
-        yield NoTitle("<no title>")
         yield Clock()
 
 
