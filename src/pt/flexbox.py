@@ -40,12 +40,15 @@ class FlexBoxLayout(Layout):
         """Generate a layout map that defines where the widgets will be drawn.
 
         Args:
+        ----
             parent: Parent widget.
             children: A list of widgets to be placed.
             size: Size of container.
 
         Returns:
+        -------
             An iterable of widget locations.
+
         """
         parent.pre_layout(self)
         viewport = parent.app.size
@@ -64,9 +67,8 @@ class FlexBoxLayout(Layout):
             if overlay
         ]
 
-        NewSize = Size
         if margins:
-            resolve_margin = NewSize(
+            resolve_margin = Size(
                 sum(
                     [
                         max(margin1[1], margin2[3])
@@ -94,13 +96,11 @@ class FlexBoxLayout(Layout):
             styles,
         )
 
-        NewPlacement = WidgetPlacement
-
         return [
-            NewPlacement(
+            WidgetPlacement(
                 region=region,
                 offset=style.offset.resolve(
-                    NewSize(region.width, region.height),
+                    Size(region.width, region.height),
                     viewport,
                 )
                 if style.has_rule("offset")
@@ -132,6 +132,7 @@ class FlexBoxLayout(Layout):
         """Generate regions balanced rows from provided widgets.
 
         Args:
+        ----
             parent: The parent container widget primarily for styles.
             children: Widgets to be layed out.
             viewport: Size of the of parent viewport.
@@ -141,7 +142,9 @@ class FlexBoxLayout(Layout):
             styles: Styles of children expanded out beforehand.
 
         Returns:
+        -------
             Tuples of regions and box models ready to be placed.
+
         """
         margin_width, margin_height = margin
         pwidth, pheight = viewport - margin
@@ -163,7 +166,7 @@ class FlexBoxLayout(Layout):
         add_row = row_sizes.append
         row_width, row_pos, max_height = 0, 0, 0
         for i, (
-            widget,
+            _,
             (width, height, box_margin),
             (is_abs, is_overlay),
         ) in enumerate(zip(children, resolved, placements, strict=True)):
@@ -184,7 +187,6 @@ class FlexBoxLayout(Layout):
         halign, valign = parent.styles.align
         center_aligned = halign == "center"
         right_aligned = halign == "right"
-        NewRegion = Region
         box_models: list[Region] = []
         add_region = box_models.append
         prev_index = None
@@ -197,14 +199,14 @@ class FlexBoxLayout(Layout):
             else:
                 x = 0
 
-            for widget, (width, height, box_margin), (is_abs, is_overlay) in zip(
+            for _, (width, height, box_margin), (is_abs, is_overlay) in zip(
                 children[prev_index:index],
                 resolved[prev_index:index],
                 placements[prev_index:index],
                 strict=True,
             ):
                 add_region(
-                    NewRegion(
+                    Region(
                         x + box_margin.left,
                         row_pos + box_margin.top,
                         width := floor(width),
