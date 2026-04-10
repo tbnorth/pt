@@ -21,7 +21,11 @@ class TextDeskLayout(FlexBoxContainer):
     def compose(self) -> ComposeResult:
         """Create child widgets for the app."""
         for widget in self.app.plugins:
-            yield widget()
+            if isinstance(widget, tuple):
+                widget, kwargs = widget
+                yield widget(**kwargs)
+            else:
+                yield widget()
 
 class TextDeskApp(App):
     BINDINGS = [("d", "toggle_dark", "Toggle dark mode")]
