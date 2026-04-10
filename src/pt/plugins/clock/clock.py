@@ -124,3 +124,5 @@ class Clock(Button):
             self.app.install_screen(ts, name="time_screen")
 
         self.app.push_screen("time_screen")
+
+    on_click = action_press
