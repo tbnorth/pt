@@ -8,7 +8,6 @@ authors = [
 ]
 requires-python = ">=3.14"
 dependencies = [
-    "pt-win",
     "pyperclip>=1.11.0",
     "textual>=8.2.2",
 ]
@@ -36,6 +35,3 @@ select = [
 
 [tool.ruff.lint.isort]
 known-first-party = ["pt"]
-
-[tool.uv.sources]
-pt-win = { path = "../pt_win", editable = true }
