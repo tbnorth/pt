@@ -1,0 +1,21 @@
+Clock {
+    min-width: 10;
+}
+TimeScreen Button {
+    padding: 0;
+    text-align: left;
+    min-width: 2;
+}
+.leftish {
+    content-align: left bottom;
+}
+.leftish Vertical {
+    width: auto;
+}
+.leftish TextArea {
+    padding: 0;
+    border: none;
+}
+.leftish Button {
+    min_width: 5;
+}

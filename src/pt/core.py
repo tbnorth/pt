@@ -29,6 +29,7 @@ class TextDeskLayout(FlexBoxContainer):
 
 class TextDeskApp(App):
     BINDINGS = [("d", "toggle_dark", "Toggle dark mode")]
+    CSS_PATH = "bench.tcss"
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

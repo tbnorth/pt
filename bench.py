@@ -18,7 +18,7 @@ from pt.plugins.tail import Tail
 
 if __name__ == "__main__":
     app = TextDeskApp()
-    # app.plugins.append(Clock)
+    app.plugins.append(Clock)
     cbl = "C:\\Users\\tbrown02\\t\\clipboard_logs\\clipboard_log_2026-04-05.md"
     if Path(cbl).exists():
         app.plugins.append((Tail, {"path": cbl}))

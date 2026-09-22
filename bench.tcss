@@ -1,8 +1,0 @@
-Clock {
-    min-width: 10;
-}
-TimeScreen Button {
-    padding: 0;
-    text-align: left;
-    min-width: 2;
-}

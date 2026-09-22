@@ -1,11 +1,14 @@
 
 from datetime import UTC, datetime
+from pathlib import Path
 
 import pyperclip
 from textual.app import ComposeResult
 from textual.screen import Screen
-from textual.widgets import Button
+from textual.widgets import Button, TextArea
+from textual.containers import Horizontal, Vertical
 
+SCREEN_NAME = "tail_screen"
 
 class CopyableButton(Button):
     """A label that can be copied to the clipboard."""
@@ -26,62 +29,28 @@ class CopyableButton(Button):
         self.set_timer(0.33, reset)
 
 
-class TimeScreen(Screen):
-    """A simple screen to display the time."""
-
-    fmts = [
-        "%Y%m%d%H%M%S",  # 20260404155120
-        "%Y%m%d",  # 20260404
-        "%c",  # Sat Apr  4 15:51:20 2026
-        "%a %b %d %I:%M %p %Y",  # Sat Apr 04 04:00 PM 2026
-        "%Y-%m-%d %H:%M:%S",  # 2026-04-04 15:51:20
-        "EPOCH",  # 1775335880.720142
-        "ISO",  # 2026-04-04T15:51:20.720142-05:00
-        "ISOUTC",  # 2026-04-04T20:51:20.720142+00:00
-        "%A, %B %d, %Y",  # Saturday, April 04, 2026
-        "%a, %b %d, %Y",  # Sat, Apr 04, 2026
-        "%B %d, %Y",  # April 04, 2026
-        "%b %d, %Y",  # Apr 04, 2026
-        "%d %B %Y",  # 04 April 2026
-        "%x",  # 04/04/26
-        "%H:%M:%S",  # 15:51:20
-        "%I:%M %p",  # 03:51 PM
-        "%H%M%S",  # 155120
-        "Day %j",  # Day 094
-        "Week starting Monday: %U",  # Week starting Monday: 13
-        "Week starting Sunday: %W",  # Week starting Sunday: 13
-    ]
+class TailScreen(Screen):
+    """A simple screen to display the tail of a file."""
 
     def __init__(self, *args, **kwargs):
+        self.path = kwargs.pop("path", None)
+        self.lines = Path(self.path).read_text().splitlines()[-10:]
         super().__init__(*args, **kwargs)
         self._btns = []
 
     def compose(self) -> ComposeResult:
         """Create child widgets for the screen."""
-        for fmt in self.fmts:
-            btn = Button(fmt, compact=True)
-            self._btns.append(btn)
-            yield btn
+        self.last_lines = [Button(">", compact=True) for _ in range(100)]
+        for line, btn in enumerate(self.last_lines):
+            btn.line = line
+        self.text_area = TextArea(Path(self.path).read_text(), read_only=True)
+        self.text_area.scroll_end(animate=False)
+        yield Horizontal(Vertical(*self.last_lines), self.text_area, classes="leftish")
 
-    def on_click(self) -> None:
-        """Handle click events on the screen."""
-        # self.app.pop_screen()
-        self.set_timer(0.66, self.app.pop_screen)
 
     # @on(ScreenResume)
     def on_screen_resume(self):
         now = datetime.now()
-        for fmt, btn in zip(self.fmts, self._btns, strict=True):
-            match fmt:
-                case "EPOCH":
-                    txt = str(now.timestamp())
-                case "ISO":
-                    txt = now.astimezone().isoformat()
-                case "ISOUTC":
-                    txt = now.astimezone(UTC).isoformat()
-                case _:
-                    txt = now.strftime(fmt)
-            btn.label = now.strftime(txt)
 
     def on_button_pressed(self, pressed):
         button = pressed.button
@@ -90,11 +59,13 @@ class TimeScreen(Screen):
         def reset(button=button, content=button.label):
             button.label = content
 
-        button.label = "Copied"
+        button.label = str(button.line)
+        button.label = str(button.parent.size.height)
+
         self.set_timer(0.33, reset)
         self.set_timer(0.66, self.app.pop_screen)
 
-    def on_key(self, key):
+    def Xon_key(self, key):
         if key.key not in ("tab", "enter"):
             self.app.pop_screen()
 
@@ -130,12 +101,12 @@ class Tail(Button):
 
 
     def action_press(self) -> None:
-        """Handle click events on the clock."""
-        if "time_screen" not in self.app.SCREENS:
-            ts = TimeScreen()
-            self.app.SCREENS["time_screen"] = ts
-            self.app.install_screen(ts, name="time_screen")
+        """Handle click events on the tail."""
+        if SCREEN_NAME not in self.app.SCREENS:
+            ts = TailScreen(path=self.path)
+            self.app.SCREENS[SCREEN_NAME] = ts
+            self.app.install_screen(ts, name=SCREEN_NAME)
 
-        self.app.push_screen("time_screen")
+        self.app.push_screen(SCREEN_NAME)
 
     on_click = action_press
