@@ -5,3 +5,5 @@
 - [x] NoTitle - toggle the titlebar of the window.
 - [ ] Tail - show the end of a file, like `tail -f` in Linux.
 - [ ] CredGet - credget integration.
+- [ ] CPU - show CPU usage and statistics.
+- [ ] Memory - show memory usage and statistics.

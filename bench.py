@@ -14,6 +14,7 @@ except ImportError:
 
 from pt.core import TextDeskApp
 from pt.plugins.clock import Clock
+from pt.plugins.cpu import CPU
 from pt.plugins.tail import Tail
 
 if __name__ == "__main__":
@@ -26,4 +27,5 @@ if __name__ == "__main__":
         app.plugins.append(NoTitle)
     if CredGet:
         app.plugins.append(CredGet)
+    app.plugins.append(CPU)
     app.run()
