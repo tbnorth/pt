@@ -95,7 +95,7 @@ class Tail(Button):
                     if f.read(1) == b"\n":
                         content = f.read().decode("utf-8")
                         if content.strip():
-                            self.label = content.strip()
+                            self.label = " " + content.strip()
                             break
                     f.seek(-1, 1)
 

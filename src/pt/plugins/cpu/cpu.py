@@ -121,7 +121,7 @@ class CPU(Button):
             self.history.pop(0)
         x = int(self.history[-1])
         pct = "󰘣" if x > 99 else f"{x:02d}"[0]
-        text = Text(f" {pct}")
+        text = Text(f" {pct}")
         for x in self.history:
             color = grad.get_color(x / 100)
             text.append(BAR[int((x / 100) * (len(BAR) - 1))], style=f"{color.hex}")
